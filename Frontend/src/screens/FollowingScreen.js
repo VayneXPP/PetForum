@@ -1,12 +1,13 @@
+// FollowingScreen.js
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function ShoppingCartScreen() {
+function FollowingScreen() {
   return (
     <View>
-      <Text>shoping page</Text>
+      <Text>Following</Text>
     </View>
   );
 }
 
-export default ShoppingCartScreen;
+export default FollowingScreen;

@@ -5,7 +5,8 @@ const authStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // 修改为'flex-start'使元素靠近屏幕顶部
+    paddingTop: 100, // 可以调整这个值来改变距离顶部的距离
   },
   title: {
     fontSize: 24,

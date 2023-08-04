@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function ShoppingCartScreen() {
+function RecommendScreen() {
   return (
     <View>
-      <Text>shoping page</Text>
+      <Text>recommend post goes here page</Text>
     </View>
   );
 }
 
-export default ShoppingCartScreen;
+export default RecommendScreen;

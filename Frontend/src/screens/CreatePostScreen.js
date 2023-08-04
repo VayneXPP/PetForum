@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function BrowsePostsScreen() {
+function CreatePostScreen() {
   return (
     <View>
       <Text>Creat post page</Text>
@@ -9,4 +9,4 @@ function BrowsePostsScreen() {
   );
 }
 
-export default BrowsePostsScreen;
+export default CreatePostScreen;

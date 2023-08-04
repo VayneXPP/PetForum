@@ -6,6 +6,8 @@ import ShoppingCartScreen from '../screens/ShoppingCartScreen';
 import CreatePostScreen from '../screens/CreatePostScreen';
 import MessagesScreen from '../screens/MessagesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import BrowseStackScreen from './BrowseStack'; // 导入BrowseStackScreen
+import BrowseTabs from './BrowseStack'; // 导入BrowseStack
 
 const Tab = createBottomTabNavigator();
 
@@ -48,13 +50,13 @@ function BottomTabNavigator() {
     >
       <Tab.Screen
         name="Browse"
-        component={BrowsePostsScreen}
-        options={({ focused }) => ({
-          tabBarLabelStyle: {
-            fontWeight: focused ? 'bold' : 'normal',
-          },
-        })}
+        component={BrowseTabs} // 使用BrowseStack而不是BrowsePostsScreen
+        options={{
+       //   headerShown: false, // 隐藏标题
+        }}
       />
+
+      
       <Tab.Screen
         name="Shopping"
         component={ShoppingCartScreen}
