@@ -1,9 +1,8 @@
-// navigation/AppNavigator.js
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import ForumScreen from '../screens/ForumScreen'; // 假设你有一个ForumScreen组件
+import BottomTabNavigator from './BottomTabNavigator'; 
 
 const Stack = createStackNavigator();
 
@@ -12,7 +11,11 @@ function AppNavigator() {
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Register" component={RegisterScreen} />
-      <Stack.Screen name="Forum" component={ForumScreen} />
+      <Stack.Screen 
+        name="Main" 
+        component={BottomTabNavigator} 
+        options={{ headerShown: false }} // 这行代码隐藏了顶部标题
+      />
     </Stack.Navigator>
   );
 }
