@@ -1,3 +1,4 @@
+// BottomTabNavigator.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
@@ -6,9 +7,8 @@ import ShoppingCartScreen from '../screens/ShoppingCartScreen';
 import CreatePostScreen from '../screens/CreatePostScreen';
 import MessagesScreen from '../screens/MessagesScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import BrowseStackScreen from './BrowseStack'; // 导入BrowseStackScreen
 import BrowseTabs from './BrowseStack'; // 导入BrowseStack
-
+import CreatePostButton from '../components/CreatePostButton'; // 导入自定义组件
 const Tab = createBottomTabNavigator();
 
 function BottomTabNavigator() {
@@ -67,7 +67,6 @@ function BottomTabNavigator() {
         })}
       />
       {/* 为其他屏幕重复上述设置 */}
-      <Tab.Screen name="CreatePost" component={CreatePostScreen} />
       <Tab.Screen name="Messages" component={MessagesScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>

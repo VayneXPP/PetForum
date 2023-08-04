@@ -3,6 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import BottomTabNavigator from './BottomTabNavigator'; 
+import CreatePostScreen from '../screens/CreatePostScreen'; // 导入新组件
+
 
 const Stack = createStackNavigator();
 
@@ -16,6 +18,7 @@ function AppNavigator() {
         component={BottomTabNavigator} 
         options={{ headerShown: false }} // 这行代码隐藏了顶部标题
       />
+      <Stack.Screen name="CreatePost" component={CreatePostScreen} />
     </Stack.Navigator>
   );
 }
