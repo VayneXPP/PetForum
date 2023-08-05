@@ -14,7 +14,7 @@ function RegisterScreen({ navigation }) {
       return;
     }
 
-    fetch('http://192.168.0.40:3000/register', {
+    fetch('http://192.168.0.40:3000/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

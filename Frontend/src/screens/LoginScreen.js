@@ -13,7 +13,7 @@ function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    fetch('http://192.168.0.40:3000/login', {
+    fetch('http://192.168.0.40:3000/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,8 +26,9 @@ function LoginScreen({ navigation }) {
           // 存储电话号码
           await AsyncStorage.setItem('userPhone', phonenum);
           // 存储头像URL
-          console.log(data.avatar)
           await AsyncStorage.setItem('userAvatar', data.avatar);
+          // 存储令牌
+          await AsyncStorage.setItem('userToken', data.token); // 假设服务器将令牌作为响应的一部分返回
           navigation.replace('Main');
         } else {
           Alert.alert('Login failed', data.message);
