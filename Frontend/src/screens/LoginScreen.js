@@ -1,3 +1,5 @@
+// LoginScreen.js
+
 import React, { useState } from 'react';
 import { View, Alert, StyleSheet, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import ButtonComponent from '../components/ButtonComponent'; // 导入自定义按钮组件
@@ -18,21 +20,24 @@ function LoginScreen({ navigation }) {
       },
       body: JSON.stringify({ phonenum, password }),
     })
-        .then((response) => response.json())
-        .then(async (data) => {
+      .then((response) => response.json())
+      .then(async (data) => {
         if (data.success) {
-            // 存储电话号码
-            await AsyncStorage.setItem('userPhone', phonenum);
-            navigation.replace('Main');
+          // 存储电话号码
+          await AsyncStorage.setItem('userPhone', phonenum);
+          // 存储头像URL
+          console.log(data.avatar)
+          await AsyncStorage.setItem('userAvatar', data.avatar);
+          navigation.replace('Main');
         } else {
-            Alert.alert('Login failed', data.message);
+          Alert.alert('Login failed', data.message);
         }
-        })
-        .catch((error) => {
+      })
+      .catch((error) => {
         console.error(error);
         Alert.alert('An error occurred', error.message);
-        });
-        };
+      });
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

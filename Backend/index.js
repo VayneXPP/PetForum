@@ -6,6 +6,7 @@ const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads', express.static('D:\\Projects\\PetForum\\Backend\\uploads'));
 
 // 创建MySQL连接
 const connection = mysql.createConnection({
@@ -17,22 +18,28 @@ const connection = mysql.createConnection({
 
 // 连接到数据库
 connection.connect();
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// log in 
 app.post('/login', (req, res) => {
   const { phonenum, password } = req.body;
-  console.log(phonenum);
   // 查询数据库，验证电话号码和密码
   connection.query('SELECT * FROM Users WHERE phone = ? AND password = ?', [phonenum, password], (error, results) => {
     if (error) {
       console.error(error);
       res.status(500).json({ success: false, message: 'Server error' });
     } else if (results.length > 0) {
-      res.json({ success: true, message: 'Login successful' });
+      // 从查询结果中获取头像路径
+      console.log(results);
+      const avatarPath = results[0].avatar;
+      // 构造完整的URL或相对路径,部署需要修改/////////////////////////////////////////////
+      const avatarUrl = `http://192.168.0.40:8080/${avatarPath}`;
+
+      res.json({ success: true, message: 'Login successful', avatar: avatarUrl }); // 将头像URL添加到响应
     } else {
       res.json({ success: false, message: 'Invalid phone number or password' });
     }
   });
 });
+
 
 app.post('/register', (req, res) => {
     const { phonenum, password } = req.body;
