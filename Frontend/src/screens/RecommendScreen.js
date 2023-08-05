@@ -5,6 +5,7 @@ import { FlatGrid } from 'react-native-super-grid';
 import axios from 'axios';
 import { apiFetch } from '../utils/tokenApi.js';
 import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native';
 
 function RecommendScreen() {
   const navigation = useNavigation();
@@ -30,11 +31,10 @@ function RecommendScreen() {
       itemDimension={130}
       data={posts}
       renderItem={({ item }) => (
-        <View onTouchEnd={() => handlePostClick(item)}>
-          {/* <Image source={{ uri: item.image }} style={{ width: 100, height: 100 }} /> */}
+        <TouchableOpacity onPress={() => handlePostClick(item)}>
           <Image source={{uri: `http://192.168.0.40:8080/postImages/${item.image}`}} style={{ width: 175, height: 220 ,marginTop:15,marginBottom:5}}/>
           <Text>{item.title}</Text>
-        </View>
+          </TouchableOpacity>
       )}
       keyExtractor={item => item.postID.toString()}
       onEndReached={loadPosts}
