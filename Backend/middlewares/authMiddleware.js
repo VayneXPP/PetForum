@@ -1,6 +1,6 @@
 // authMiddleware.js
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'fgOEC9QpRFOvOUYvd8ZON5d717IOopBs1'; // 这个应该和创建JWT时使用的秘钥相同
+const SECRET_KEY = 'fgOEC9QpRFOvOUYvd8ZON5d717IOopBs'; // 这个应该和创建JWT时使用的秘钥相同
 
 function authenticate(req, res, next) {
   const authHeader = req.header('Authorization');
