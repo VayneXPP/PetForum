@@ -51,26 +51,37 @@ function CreatePostScreen() {
   );
 
   const handlePost = async () => {
+    if (title.length > 25) {
+      Alert.alert('字数超出限制', '标题不能超过25个字符。');
+      return;
+    }
+  
+    if (content.length > 1000) {
+      Alert.alert('字数超出限制', '正文不能超过1000个字符。');
+      return;
+    }
+  
     if (!title && !content) {
       Alert.alert('请输入内容', '标题和正文不能为空。');
       return;
     }
-
+  
     try {
-        const data = await apiFetch('posts/create', {
-          method: 'POST',
-          body: JSON.stringify({ title, content }),
-        }, navigation);
-        setHasPosted(true);
-        navigation.navigate('Browse');
-      } catch (error) {
-        if (error.message === 'Authentication failed') {
-          setPostDraft({ title: '', content: '' }); // 更改为使用setPostDraft
-        } else {
-          Alert.alert('出错', '发布帖子时出现了一个问题，请重试。');
-        }
+      const data = await apiFetch('posts/create', {
+        method: 'POST',
+        body: JSON.stringify({ title, content }),
+      }, navigation);
+      setHasPosted(true);
+      navigation.navigate('Browse');
+    } catch (error) {
+      if (error.message === 'Authentication failed') {
+        setPostDraft({ title: '', content: '' }); // 更改为使用setPostDraft
+      } else {
+        Alert.alert('出错', '发布帖子时出现了一个问题，请重试。');
       }
+    }
   };
+  
 
   return (
     <View style={styles.container}>
