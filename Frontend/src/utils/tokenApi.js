@@ -21,11 +21,13 @@ export async function apiFetch(endpoint, options, navigation) {
   if (!data.success) {
     Alert.alert('错误', data.message);
     if (data.message === 'Authentication failed') {
-      // 如果验证失败，导航到登录页面
+      // 如果验证失败，清除用户信息并导航到登录页面
+      await AsyncStorage.multiRemove(['userToken', 'userPhone', 'userAvatar']);
       navigation.navigate('Login');
     }
     throw new Error(data.message);
   }
+  
 
   return data;
 }
