@@ -8,6 +8,7 @@ function CreatePostScreen() {
   const [content, setContent] = useState('');  //content text
   const [token, setToken] = useState('');     // token
   const navigation = useNavigation();
+  const [hasPosted, setHasPosted] = useState(false); // 新增状态
 
   // 使用 useFocusEffect 钩子来处理离开页面的逻辑
   useFocusEffect(
@@ -19,70 +20,80 @@ function CreatePostScreen() {
       };
       fetchToken();
 
-      const onLeave = () => {
-        if (title || content) {
-          Alert.alert(
+      const onLeave = (e) => {
+        if (hasPosted || !(title || content)) {
+            return; // 如果已成功发布或没有编辑内容，直接返回
+        }
+        // 阻止默认的导航行为
+        e.preventDefault();
+        Alert.alert(
             '警告',
             '如果离开，任何编辑好的内容将遗失。',
             [
                 { text: '留在此页', style: 'cancel' },
-                { text: '确认离开', onPress: () => { setTitle(''); setContent(''); navigation.navigate('Browse'); } }, // 可以在这里添加导航逻辑
+                { text: '确认离开', onPress: clearContent }, // 调用清除内容并导航的函数
             ],
             { cancelable: true }
           );
-        }
       };
 
+        // 清除内容并导航到浏览页面的函数
+        const clearContent = () => {
+        setTitle('');
+        setContent('');
+        navigation.navigate('Browse');
+    };
+
       // 添加导航监听器
-      const unsubscribe = navigation.addListener('blur', onLeave);
+      const unsubscribe = navigation.addListener('beforeRemove', onLeave); // 使用 beforeRemove 事件
 
       return () => {
         // 清除监听器以避免内存泄露
         unsubscribe();
       };
-    }, [navigation, title, content])
+    }, [navigation, title, content, hasPosted])
   );
 
-  // 处理提交按钮
-    const handlePost = () => {
-        if (!title && !content) {
-            // 用户没有输入任何内容
-            Alert.alert('请输入内容', '标题和正文不能为空。');
-            return;
-        }
+   // 处理提交按钮
+   const handlePost = () => {
+    if (!title && !content) {
+      Alert.alert('请输入内容', '标题和正文不能为空。');
+      return;
+    }
 
-        // 这里你可以添加向后端发送数据的代码
-        // 构造请求头，包括令牌
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`, // 假设你在后端使用“Bearer”方案
-        };
+    // 构造请求头，包括令牌
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`, // 假设你在后端使用“Bearer”方案
+    };
 
     // 构造请求体
-        const body = JSON.stringify({
-            title,
-            content,
-        });
+    const body = JSON.stringify({
+      title,
+      content,
+    });
 
-        // 发送请求
-        fetch('http://192.168.0.40:3000/posts/create', {
-            method: 'POST',
-            headers,
-            body,
-        })
-        .then((response) => response.json())
-        .then((data) => {
+    // 发送请求
+    fetch('http://192.168.0.40:3000/posts/create', {
+      method: 'POST',
+      headers,
+      body,
+    })
+      .then((response) => response.json())
+      .then((data) => {
         if (data.success) {
-            Alert.alert('成功', '帖子已发布！', [{ text: 'OK', onPress: () => navigation.navigate('Browse') }]);
+          setHasPosted(true); // 设置已成功发布
+          // 帖子发布成功，直接导航到主页面
+          navigation.navigate('Browse');
         } else {
-            Alert.alert('失败', data.message);
+          Alert.alert('失败', data.message);
         }
-        })
-        .catch((error) => {
+      })
+      .catch((error) => {
         console.error(error);
         Alert.alert('出错', '发布帖子时出现了一个问题，请重试。');
-        });
-};
+      });
+  };
 
   return (
     <View style={styles.container}>
