@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const connection = require('../databse/db.js'); // 注意适当的路径
+const connection = require('../database/db.js'); // 注意适当的路径
 const SECRET_KEY = 'fgOEC9QpRFOvOUYvd8ZON5d717IOopBs'; // 考虑使用环境变量来存储
 
 router.post('/login', (req, res) => {
@@ -20,9 +20,8 @@ router.post('/login', (req, res) => {
       // 构造完整的URL或相对路径,部署需要修改！！！！
       const avatarUrl = `http://192.168.0.40:8080/${avatarPath}`;
       // 生成token
-      const token = jwt.sign({ id: results[0].id }, SECRET_KEY);
+      const token = jwt.sign({ userID: results[0].userID }, SECRET_KEY);
     
-
       res.json({ success: true, message: 'Login successful', avatar: avatarUrl, token }); // 将令牌添加到响应
     
     } else {

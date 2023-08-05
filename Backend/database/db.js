@@ -8,6 +8,9 @@ const connection = mysql.createConnection({
   database: 'PetCommunity'
 });
 
-connection.connect();
+connection.connect((err) => {
+  if (err) throw err;
+  console.log('Database Connected!');
+});
 
 module.exports = connection;
