@@ -1,3 +1,4 @@
+// BottomTabNavigator.js
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';

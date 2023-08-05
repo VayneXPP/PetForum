@@ -1,3 +1,4 @@
+// CustomTopTabs.js
 import React from 'react';
 import { View, StyleSheet, SafeAreaView } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';

@@ -1,3 +1,4 @@
+// CreatePostScreen.js
 import React, { useState, useCallback } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';

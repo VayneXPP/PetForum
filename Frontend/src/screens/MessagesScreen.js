@@ -1,7 +1,8 @@
+// MessagesScreen.js
 import React from 'react';
 import { View, Text } from 'react-native';
 
-function BrowsePostsScreen() {
+function MessagesScreen() {
   return (
     <View>
       <Text>Message page</Text>
@@ -9,4 +10,4 @@ function BrowsePostsScreen() {
   );
 }
 
-export default BrowsePostsScreen;
+export default MessagesScreen;
