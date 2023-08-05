@@ -18,7 +18,7 @@ router.post('/login', (req, res) => {
       console.log(results);
       const avatarPath = results[0].avatar;
       // 构造完整的URL或相对路径,部署需要修改！！！！
-      const avatarUrl = `http://192.168.0.40:8080/${avatarPath}`;
+      const avatarUrl = `http://192.168.0.40:8080/avatars/${avatarPath}`;
       // 生成token
       const token = jwt.sign({ userID: results[0].userID }, SECRET_KEY);
     
