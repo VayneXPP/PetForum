@@ -61,8 +61,8 @@ function CreatePostScreen() {
       return;
     }
   
-    if (!title && !content) {
-      Alert.alert('请输入内容', '标题和正文不能为空。');
+    if (!title) {
+      Alert.alert('请输入内容', '标题不能为空。');
       return;
     }
   
