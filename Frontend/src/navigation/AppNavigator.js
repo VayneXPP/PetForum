@@ -6,6 +6,7 @@ import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import BottomTabNavigator from './BottomTabNavigator'; 
 import CreatePostScreen from '../screens/CreatePostScreen'; // 导入新组件
+import PostDetailScreen from '../screens/PostDetailScreen';
 
 
 const Stack = createStackNavigator();
@@ -21,6 +22,7 @@ function AppNavigator() {
         options={{ headerShown: false }} // 这行代码隐藏了顶部标题
       />
       <Stack.Screen name="CreatePost" component={CreatePostScreen} />
+      <Stack.Screen name="PostDetailScreen" component={PostDetailScreen} />
     </Stack.Navigator>
   );
 }
