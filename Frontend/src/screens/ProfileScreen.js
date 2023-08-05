@@ -8,7 +8,7 @@ import { AppContext } from '../context.js';  // 根据你的文件路径修改�
 function ProfileScreen({ navigation }) {
   const { setPostDraft } = useContext(AppContext);
   const [phonenum, setPhonenum] = useState('');
-  const [avatar, setAvatar] = useState('http://192.168.0.40:8080/avatar1.jpg'); // 定义一个状态来跟踪avatar
+  const [avatar, setAvatar] = useState('http://192.168.0.40:8080/avatars/avatar1.jpg'); // 定义一个状态来跟踪avatar
 
   // 从存储中获取电话号码和头像URL
   useEffect(() => {
