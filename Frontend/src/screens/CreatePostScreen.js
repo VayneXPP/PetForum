@@ -72,6 +72,7 @@ function CreatePostScreen() {
         body: JSON.stringify({ title, content }),
       }, navigation);
       setHasPosted(true);
+      setPostDraft({ title: '', content: '' }); // 清空内容
       navigation.navigate('Browse');
     } catch (error) {
       if (error.message === 'Authentication failed') {

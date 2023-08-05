@@ -1,10 +1,12 @@
 // ProfileScreen.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AppContext } from '../context.js';  // 根据你的文件路径修改这里
 
 
 function ProfileScreen({ navigation }) {
+  const { setPostDraft } = useContext(AppContext);
   const [phonenum, setPhonenum] = useState('');
   const [avatar, setAvatar] = useState('http://192.168.0.40:8080/avatar1.jpg'); // 定义一个状态来跟踪avatar
 
@@ -26,7 +28,9 @@ function ProfileScreen({ navigation }) {
 
   // 注销功能
   const handleLogout = async () => {
-    await AsyncStorage.removeItem('userPhone');
+    // 清空帖子草稿
+    setPostDraft({ title: '', content: '' });
+    await AsyncStorage.multiRemove(['userToken', 'userPhone', 'userAvatar']);
     navigation.replace('Login');
   };
 
