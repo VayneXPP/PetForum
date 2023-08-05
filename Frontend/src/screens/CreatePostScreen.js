@@ -1,22 +1,20 @@
 // CreatePostScreen.js
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react'; // 新增引入useContext
 import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { apiFetch } from '../utils/tokenApi.js';  // 根据你的文件路径修改这里
-
+import { apiFetch } from '../utils/tokenApi.js';
+import { AppContext } from '../context.js';  // 根据你的文件路径修改这里
 
 function CreatePostScreen() {
-  const [title, setTitle] = useState('');       // title text
-  const [content, setContent] = useState('');  //content text
-  const [token, setToken] = useState('');     // token
+  const { postDraft, setPostDraft } = useContext(AppContext);
+  const { title, content } = postDraft;
+  const [token, setToken] = useState('');     
   const navigation = useNavigation();
-  const [hasPosted, setHasPosted] = useState(false); // 新增状态
+  const [hasPosted, setHasPosted] = useState(false);
 
-  // 使用 useFocusEffect 钩子来处理离开页面的逻辑
   useFocusEffect(
     useCallback(() => {
-      // 从AsyncStorage获取令牌
       const fetchToken = async () => {
         const userToken = await AsyncStorage.getItem('userToken');
         setToken(userToken);
@@ -25,51 +23,39 @@ function CreatePostScreen() {
 
       const onLeave = (e) => {
         if (hasPosted || !(title || content)) {
-            return; // 如果已成功发布或没有编辑内容，直接返回
+          return;
         }
-        // 阻止默认的导航行为
         e.preventDefault();
         Alert.alert(
-            '警告',
-            '如果离开，任何编辑好的内容将遗失。',
-            [
-                { text: '留在此页', style: 'cancel' },
-                { text: '确认离开', onPress: clearContent }, // 调用清除内容并导航的函数
-            ],
-            { cancelable: true }
-          );
+          '警告',
+          '如果离开，任何编辑好的内容将遗失。',
+          [
+            { text: '留在此页', style: 'cancel' },
+            { text: '确认离开', onPress: clearContent },
+          ],
+          { cancelable: true }
+        );
       };
 
-        // 清除内容并导航到浏览页面的函数
-        const clearContent = () => {
-        setTitle('');
-        setContent('');
+      const clearContent = () => {
+        setPostDraft({ title: '', content: '' }); // 更改为使用setPostDraft
         navigation.navigate('Browse');
-    };
+      };
 
-      // 添加导航监听器
-      const unsubscribe = navigation.addListener('beforeRemove', onLeave); // 使用 beforeRemove 事件
+      const unsubscribe = navigation.addListener('beforeRemove', onLeave); 
 
       return () => {
-        // 清除监听器以避免内存泄露
         unsubscribe();
       };
     }, [navigation, title, content, hasPosted])
   );
 
-   // 处理提交按钮
-   const handlePost = async () => { // 注意我们这里把函数改成了异步的
+  const handlePost = async () => {
     if (!title && !content) {
       Alert.alert('请输入内容', '标题和正文不能为空。');
       return;
     }
-  
-    // 构造请求体
-    const body = JSON.stringify({
-      title,
-      content,
-    });
-  
+
     try {
         const data = await apiFetch('posts/create', {
           method: 'POST',
@@ -79,9 +65,8 @@ function CreatePostScreen() {
         navigation.navigate('Browse');
       } catch (error) {
         if (error.message === 'Authentication failed') {
-          // 如果 token 验证失败，不显示任何错误消息，因为你已经导航到登录页面了
+          setPostDraft({ title: '', content: '' }); // 更改为使用setPostDraft
         } else {
-          // 对于其他错误，显示一个通用的错误消息
           Alert.alert('出错', '发布帖子时出现了一个问题，请重试。');
         }
       }
@@ -92,13 +77,13 @@ function CreatePostScreen() {
       <TextInput
         style={styles.input}
         placeholder="请输入标题"
-        onChangeText={setTitle}
+        onChangeText={text => setPostDraft({ ...postDraft, title: text })} // 更改为使用setPostDraft
         value={title}
       />
       <TextInput
         style={styles.inputContent}
         placeholder="请输入正文 (不能超过1000个字符)"
-        onChangeText={text => setContent(text.substring(0, 1000))}
+        onChangeText={text => setPostDraft({ ...postDraft, content: text.substring(0, 1000) })} // 更改为使用setPostDraft
         value={content}
         multiline={true}
       />
