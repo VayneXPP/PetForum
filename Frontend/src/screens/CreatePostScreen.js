@@ -3,6 +3,8 @@ import React, { useState, useCallback } from 'react';
 import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { apiFetch } from '../utils/tokenApi.js';  // 根据你的文件路径修改这里
+
 
 function CreatePostScreen() {
   const [title, setTitle] = useState('');       // title text
@@ -56,44 +58,33 @@ function CreatePostScreen() {
   );
 
    // 处理提交按钮
-   const handlePost = () => {
+   const handlePost = async () => { // 注意我们这里把函数改成了异步的
     if (!title && !content) {
       Alert.alert('请输入内容', '标题和正文不能为空。');
       return;
     }
-
-    // 构造请求头，包括令牌
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`, // 假设你在后端使用“Bearer”方案
-    };
-
+  
     // 构造请求体
     const body = JSON.stringify({
       title,
       content,
     });
-
-    // 发送请求
-    fetch('http://192.168.0.40:3000/posts/create', {
-      method: 'POST',
-      headers,
-      body,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          setHasPosted(true); // 设置已成功发布
-          // 帖子发布成功，直接导航到主页面
-          navigation.navigate('Browse');
+  
+    try {
+        const data = await apiFetch('posts/create', {
+          method: 'POST',
+          body: JSON.stringify({ title, content }),
+        }, navigation);
+        setHasPosted(true);
+        navigation.navigate('Browse');
+      } catch (error) {
+        if (error.message === 'Authentication failed') {
+          // 如果 token 验证失败，不显示任何错误消息，因为你已经导航到登录页面了
         } else {
-          Alert.alert('失败', data.message);
+          // 对于其他错误，显示一个通用的错误消息
+          Alert.alert('出错', '发布帖子时出现了一个问题，请重试。');
         }
-      })
-      .catch((error) => {
-        console.error(error);
-        Alert.alert('出错', '发布帖子时出现了一个问题，请重试。');
-      });
+      }
   };
 
   return (
