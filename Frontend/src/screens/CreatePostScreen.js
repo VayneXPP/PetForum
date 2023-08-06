@@ -1,10 +1,12 @@
 // CreatePostScreen.js
 import React, { useState, useCallback, useContext } from 'react'; // 新增引入useContext
-import { View, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Alert, StyleSheet, Image } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiFetch } from '../utils/tokenApi.js';
 import { AppContext } from '../context.js';  // 根据你的文件路径修改这里
+import * as ImagePicker from 'expo-image-picker';
+
 
 function CreatePostScreen() {
   const { postDraft, setPostDraft } = useContext(AppContext);
@@ -12,6 +14,24 @@ function CreatePostScreen() {
   const [token, setToken] = useState('');     
   const navigation = useNavigation();
   const [hasPosted, setHasPosted] = useState(false);
+  const [image, setImage] = useState(null); // 保存用户选择的图片
+
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: false, // 禁止裁剪
+        //aspect: [4, 3],
+        quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+        setImage(result.assets[0].uri);
+    }
+    
+};
 
   useFocusEffect(
     useCallback(() => {
@@ -50,6 +70,7 @@ function CreatePostScreen() {
     }, [navigation, title, content, hasPosted])
   );
 
+
   const handlePost = async () => {
     if (title.length > 25) {
       Alert.alert('字数超出限制', '标题不能超过25个字符。');
@@ -67,10 +88,24 @@ function CreatePostScreen() {
     }
   
     try {
-      const data = await apiFetch('posts/create', {
+    // 创建一个formData并在其中包含图片数据
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', content);
+    if (image) {
+    formData.append('image', {
+        uri: image.uri,
+        type: 'image/jpeg',
+        name: 'image.jpg',
+    });
+}
+    const data = await apiFetch('posts/create', {
         method: 'POST',
-        body: JSON.stringify({ title, content }),
-      }, navigation);
+        headers: {
+        'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+    }, navigation);
       setHasPosted(true);
       setPostDraft({ title: '', content: '' }); // 清空内容
       navigation.navigate('Browse');
@@ -89,20 +124,23 @@ function CreatePostScreen() {
       <TextInput
         style={styles.input}
         placeholder="请输入标题"
-        onChangeText={text => setPostDraft({ ...postDraft, title: text })} // 更改为使用setPostDraft
+        onChangeText={text => setPostDraft({ ...postDraft, title: text })}
         value={title}
       />
       <TextInput
         style={styles.inputContent}
         placeholder="请输入正文 (不能超过1000个字符)"
-        onChangeText={text => setPostDraft({ ...postDraft, content: text.substring(0, 1000) })} // 更改为使用setPostDraft
+        onChangeText={text => setPostDraft({ ...postDraft, content: text.substring(0, 1000) })}
         value={content}
         multiline={true}
       />
+      <Button title="选择图片" onPress={pickImage} />
+      {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
       <Button title="发布" onPress={handlePost} />
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
