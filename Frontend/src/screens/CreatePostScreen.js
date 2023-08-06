@@ -25,7 +25,7 @@ function CreatePostScreen() {
         quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
         setImage(result.assets[0].uri);
@@ -93,10 +93,14 @@ function CreatePostScreen() {
     formData.append('title', title);
     formData.append('content', content);
     if (image) {
-    formData.append('image', {
-        uri: image.uri,
-        type: 'image/jpeg',
-        name: 'image.jpg',
+        // console.log('image is: ', image)
+        const segments = image.split('.');
+        const fileExtension = segments[segments.length - 1];  // 选择最后一个部分作为后缀名
+        // console.log("文件后缀名是:", fileExtension);
+        formData.append('image', {
+            uri: image,
+            type: `image/${fileExtension}`,
+            name: `image.${fileExtension}`,
     });
 }
     const data = await apiFetch('posts/create', {

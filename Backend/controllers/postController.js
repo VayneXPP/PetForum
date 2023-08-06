@@ -1,6 +1,7 @@
 // postController.js
 const postModel = require('../models/postModel.js');
 
+
 exports.createPost = async (req, res) => {
     const userId = req.user.userID;
     const { title, content } = req.body;
