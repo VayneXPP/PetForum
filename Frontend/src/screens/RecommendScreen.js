@@ -21,7 +21,7 @@ function RecommendScreen() {
   };
 
   useEffect(() => {
-    loadPosts();
+    loadPosts(1);
   }, []);
 
   // 顶部下拉刷新
@@ -43,11 +43,11 @@ function RecommendScreen() {
     }
   };
 
-  const loadPosts = async () => {
-    const response = await axios.get(`http://192.168.0.40:3000/posts/browse?page=${page}`);
-    setPosts([...posts, ...response.data.posts]);
-    setPage(page + 1);
-  };
+  const loadPosts = async (currentPage) => {
+    const response = await axios.get(`http://192.168.0.40:3000/posts/browse?page=${currentPage}`);
+    setPosts(prevPosts => [...prevPosts, ...response.data.posts]);
+};
+
   return (
 <View style={{flex: 1, backgroundColor: '#F5F5F5'}}>
     <FlatGrid
