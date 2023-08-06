@@ -102,7 +102,7 @@ function CreatePostScreen() {
     const data = await apiFetch('posts/create', {
         method: 'POST',
         headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data','Authorization': `Bearer ${token}`, // 假设你在后端使用“Bearer”方案
         },
         body: formData,
     }, navigation);
