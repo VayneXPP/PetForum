@@ -28,7 +28,6 @@ function LoginScreen({ navigation }) {
           await AsyncStorage.setItem('userPhone', phonenum);
           // 存储头像URL
           const avatarUrl = `${config.AVATAR_URL}${data.avatar}`;
-          console.log("av is: ", avatarUrl)
           await AsyncStorage.setItem('userAvatar', avatarUrl);
           // 存储令牌
           await AsyncStorage.setItem('userToken', data.token); // 假设服务器将令牌作为响应的一部分返回

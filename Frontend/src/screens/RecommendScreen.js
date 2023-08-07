@@ -15,7 +15,7 @@ function RecommendScreen() {
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);  
 
-  // 点击某个post的事件
+  // 点击某个post的事件,导航到指定post页面
   const handlePostClick = (item) => {
     navigation.navigate('PostDetailScreen', { post: item });
   };

@@ -21,8 +21,16 @@ function AppNavigator() {
         component={BottomTabNavigator} 
         options={{ headerShown: false }} // 这行代码隐藏了顶部标题
       />
-      <Stack.Screen name="CreatePost" component={CreatePostScreen} />
-      <Stack.Screen name="PostDetailScreen" component={PostDetailScreen} />
+      <Stack.Screen name="CreatePost" 
+      component={CreatePostScreen} 
+      options={{headerBackTitle: '' }} // 设置headerBackTitle 为空字符串
+      />
+      <Stack.Screen 
+        name="PostDetailScreen" 
+        component={PostDetailScreen} 
+        options={{ headerTitle: '', headerBackTitle: '' }} // 设置 headerTitle和headerBackTitle 为空字符串
+      />
+
     </Stack.Navigator>
   );
 }
