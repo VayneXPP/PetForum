@@ -26,7 +26,8 @@ function LoginScreen({ navigation }) {
           // 存储电话号码
           await AsyncStorage.setItem('userPhone', phonenum);
           // 存储头像URL
-          await AsyncStorage.setItem('userAvatar', data.avatar);
+          const avatarUrl = `http://192.168.0.40:8080/avatars/${data.avatar}`;
+          await AsyncStorage.setItem('userAvatar', avatarUrl);
           // 存储令牌
           await AsyncStorage.setItem('userToken', data.token); // 假设服务器将令牌作为响应的一部分返回
           navigation.replace('Main');

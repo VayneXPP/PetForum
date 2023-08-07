@@ -13,9 +13,10 @@ exports.login = async (req, res) => {
       return res.json({ success: false, message: 'Invalid phone number or password' });
     }
     
+    // 部署后需要更改
     const avatarUrl = `http://192.168.0.40:8080/avatars/${user.avatar}`;
     const token = jwt.sign({ userID: user.userID }, SECRET_KEY);
-    return res.json({ success: true, message: 'Login successful', avatar: avatarUrl, token });
+    return res.json({ success: true, message: 'Login successful', avatar: user.avatar, token });
     
   } catch (err) {
     console.error(err);
